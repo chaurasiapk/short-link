@@ -32,7 +32,7 @@ const urlSchema = new mongoose.Schema(
 );
 
 // Create the model from the schema
-const Url = mongoose.models.Url || mongoose.model("Url", urlSchema);
+const Url = mongoose.model("Url", urlSchema);
 
 // Export the model for use in other parts of the application
 export default Url;

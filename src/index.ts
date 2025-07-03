@@ -7,8 +7,11 @@ import urlRoutes from './routes/url.routes';
 // Load environment variables from .env file
 dotenv.config();
 
+// Initialize Express application
 const app = express();
 
+// Define port and MongoDB URI from environment variables
+const PORT = process.env.PORT || 8000;
 const MONGO_URI = process.env.MONGO_URI || '';
 
 // Ensure MONGO_URI is provided
@@ -26,21 +29,21 @@ app.set('view engine', 'ejs');
 // Set the views directory path
 app.set('views', path.join(__dirname, 'views'));
 
+// Register application routes
+app.use('/', urlRoutes);
 
-app.use(express.json());
-app.use("/", urlRoutes);
+// Connect to MongoDB and start server
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log('✅ Connected to MongoDB');
 
-let isConnected = false;
-
-async function connectToDatabase() {
-  if (isConnected) return;
-  await mongoose.connect(MONGO_URI);
-  isConnected = true;
-}
-
-app.use(async (req, res, next) => {
-  await connectToDatabase();
-  next();
-});
-
-export default app;
+    // Start Express server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('❌ Error connecting to MongoDB:', err);
+    process.exit(1); // Exit process on DB connection failure
+  });
