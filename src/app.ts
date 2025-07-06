@@ -20,6 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 // Parse incoming JSON requests
 app.use(express.json());
 
+app.use(express.static('public'));
+
 // ─────────────────────────────────────
 // View Engine Setup
 // ─────────────────────────────────────
