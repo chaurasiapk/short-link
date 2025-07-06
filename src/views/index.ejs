@@ -558,8 +558,10 @@
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const originalUrl = document.getElementById("originalUrl").value;
-        const response = await fetch("/shorten", {
+        const originalUrlInput = document.getElementById("originalUrl");
+        if (!validateUrl(originalUrlInput)) return;
+        const originalUrl = originalUrlInput?.value
+        const response = await fetch("/api/shorten", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ originalUrl }),
@@ -608,7 +610,7 @@
         if (!shortCode || !confirm("Are you sure you want to delete this URL?"))
           return;
         try {
-          const res = await fetch(`/remove/${shortCode}`, { method: "DELETE" });
+          const res = await fetch(`/api/remove/${shortCode}`, { method: "DELETE" });
           const data = await res.json();
           if (data.success) {
             resultCard.classList.add("hidden");

@@ -3,36 +3,36 @@ import mongoose from "mongoose";
 // Define the schema for the URL model
 const urlSchema = new mongoose.Schema(
   {
-    // Original long URL submitted by the user
+    // Original long URL provided by the user
     originalUrl: {
       type: String,
-      required: true, // This field is mandatory
-      trim: true, // Remove leading/trailing whitespaces
+      required: true, // Must be provided
+      trim: true, // Trim whitespaces
     },
 
-    // Unique shortcode representing the shortened URL
+    // Short unique code representing the shortened URL
     shortCode: {
       type: String,
       required: true,
-      unique: true, // Ensure shortCode is unique across all records
-      index: true, // Create an index to improve lookup speed
+      unique: true, // Ensure it's unique across all documents
+      index: true, // Index to speed up searches
       trim: true,
     },
 
-    // Number of times the short URL has been accessed
+    // Counter for how many times the short URL has been used
     clicks: {
       type: Number,
-      default: 0, // Initialize with 0 clicks
-      min: 0, // Prevent negative click counts
+      default: 0, // Default to 0
+      min: 0, // No negative clicks allowed
     },
   },
   {
-    timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
+    timestamps: true, // Adds createdAt and updatedAt fields automatically
   }
 );
 
-// Create the model from the schema
+// Create a model from the schema
 const Url = mongoose.model("Url", urlSchema);
 
-// Export the model for use in other parts of the application
+// Export the model for use in routes and controllers
 export default Url;

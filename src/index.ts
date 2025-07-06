@@ -1,34 +1,25 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import { app } from './app';
-
 // Load environment variables from .env file
-dotenv.config();
+import "dotenv/config";
 
-// Define port and MongoDB URI from environment variables
+import { app } from "./app";
+import { connectDB } from "./db";
+
+// Define the port from environment variables or fallback to 8000
 const PORT = process.env.PORT || 8000;
-const MONGO_URI = process.env.MONGO_URI || '';
 
-// Ensure MONGO_URI is provided
-if (!MONGO_URI) {
-  console.error('❌ FATAL ERROR: MONGO_URI is not defined.');
-  process.exit(1); // Exit process if DB URI is missing
-}
-
-// Connect to MongoDB and start server
-mongoose
-  .connect(MONGO_URI)
+// Connect to MongoDB, then start the Express server
+connectDB()
   .then(() => {
-    console.log('✅ Connected to MongoDB');
-
-    // Start Express server
-    // app.listen(PORT, () => {
-    //   console.log(`🚀 Server is running on http://localhost:${PORT}`);
-    // });
+    // Start server only after successful DB connection
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running at: http://localhost:${PORT}`);
+    });
   })
   .catch((err) => {
-    console.error('❌ Error connecting to MongoDB:', err);
-    process.exit(1); // Exit process on DB connection failure
+    // Log any errors during DB connection and terminate the process
+    console.error("❌ Failed to connect to MongoDB:", err);
+    process.exit(1);
   });
 
-export default app;
+// Optional: If needed for testing or future usage
+// export default app;
