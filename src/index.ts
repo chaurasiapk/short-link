@@ -22,13 +22,13 @@ mongoose
     console.log('✅ Connected to MongoDB');
 
     // Start Express server
-    app.listen(PORT, () => {
-      console.log(`🚀 Server is running on http://localhost:${PORT}`);
-    });
+    // app.listen(PORT, () => {
+    //   console.log(`🚀 Server is running on http://localhost:${PORT}`);
+    // });
   })
   .catch((err) => {
     console.error('❌ Error connecting to MongoDB:', err);
     process.exit(1); // Exit process on DB connection failure
   });
 
-// export default app;
+export default app;
